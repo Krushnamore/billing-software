@@ -1,12 +1,12 @@
 /**
  * api/services.ts — All API calls to the backend
  */
-
 import api from './client';
 import type { User, Product, Bill, BillItem } from '../lib/types';
 
-/* ─────────────── AUTH ─────────────── */
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
+/* ─────────────── AUTH ─────────────── */
 export interface LoginResponse {
   success: boolean;
   token: string;
@@ -61,7 +61,6 @@ export async function apiUpdateProfile(payload: Partial<User>): Promise<User> {
 }
 
 /* ─────────────── PRODUCTS ─────────────── */
-
 export async function apiGetProducts(): Promise<Product[]> {
   const { data } = await api.get<{ success: boolean; products: Product[] }>('/products');
   return data.products;
@@ -82,7 +81,6 @@ export async function apiDeleteProduct(id: string): Promise<void> {
 }
 
 /* ─────────────── BILLS ─────────────── */
-
 export interface StatsResponse {
   totalProducts: number;
   totalBills: number;
@@ -115,5 +113,5 @@ export async function apiSaveBill(payload: {
 
 export function getBillsExportUrl(): string {
   const token = localStorage.getItem('billcraft_token') || '';
-  return `/api/bills/export?token=${token}`;
+  return `${BASE_URL}/api/bills/export?token=${token}`;
 }
