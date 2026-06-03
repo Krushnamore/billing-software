@@ -1,16 +1,12 @@
-/**
- * api/client.ts — Axios instance with JWT interceptor
- * All API calls go through this client.
- */
-
 import axios from 'axios';
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: `${BASE_URL}/api`,
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Attach token automatically on every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('billcraft_token');
   if (token) {
@@ -19,7 +15,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 globally — clear token and redirect to login
 api.interceptors.response.use(
   (response) => response,
   (error) => {
